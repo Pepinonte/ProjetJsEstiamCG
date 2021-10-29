@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscription</title>
+  </head>
+  <body>
+    <h1>Inscription</h1>
+    <input
+      type="button"
+      name="lien1"
+      value="Accueil"
+      onclick="self.location.href='/index.html'"
+      style="background-color: #3cb371"
+      style="color: white; font-weight: bold"
+      onclick
+    />
+
+    <form action="/inscription" method="post">
+      <div>
+        <label for="name">Nom :</label>
+        <input type="text" id="name" name="user_name" />
+        <label for="mail">mail :</label>
+        <input type="mail" id="name" name="user_mail" />
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="user_password"/>
+      </div>
+      <div>
+        <input type="submit" value="Valider" />
+      </div>
+  </body>
+  <script src=""></script>
+</html>

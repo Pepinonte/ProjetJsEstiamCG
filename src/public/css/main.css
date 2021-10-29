@@ -1,0 +1,32 @@
+.flex-container {
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: DodgerBlue;
+  justify-content: center;
+}
+.flex-container > div {
+  background-color: #f1f1f1;
+  width: 90px;
+  margin-left: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+  line-height: 60px;
+  font-size: 30px;
+  border: solid 2px white;
+  border-radius: 5px;
+}
+
+body {
+  background: #c31432; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #240b36,
+    #c31432
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #240b36,
+    #c31432
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}

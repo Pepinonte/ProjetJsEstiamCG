@@ -1,0 +1,31 @@
+<div class="flex-container">
+  <div>X</div>
+  <div>X</div>
+  <div>X</div>
+  <div>X</div>
+  <div>X</div>
+  <div>L</div>
+  <div>X</div>
+  <div>X</div>
+  <div>X</div>
+  <div>X</div>
+  <div>X</div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 mx-auto">
+    <div class="card-body">
+      <form action="/parier" method="post">
+        <div>
+          <label for="name">Montatant a parier:</label>
+          <input class="form-control" type="text" id="montant" name="montant" />
+        </div>
+        {{#if jetons}}
+          Solde Jetons: {{jetons}}
+        {{/if}}
+        <div class="form-group">
+          <input class="btn btn-primary btn-block" type="submit" value="parier" />
+        </div>
+    </div>
+  </div>
+</div>
