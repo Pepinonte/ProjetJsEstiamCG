@@ -94,6 +94,7 @@ router.post("/parier", async (req, res) => {
   const ssn = req.session;
   const someParie = req.body.montant;
   const someParieInt = parseInt(someParie);
+  console.log("val parie ", someParieInt);
   ssn.soldeJeton = soldeTot - someParieInt;
   soldeTot = ssn.soldeJeton;
   const jetons = ssn.soldeJeton;
