@@ -19,7 +19,7 @@ router.use(
   })
 );
 
-router.get("/game/rejoindrePartie", (req, res) => res.render("game/modelGame"));
+// router.get("/game/rejoindrePartie", (req, res) => res.render("game/modelGame"));
 router.get("/game/defaite", (req, res) => res.send("t'es un caca"));
 
 module.exports = router;

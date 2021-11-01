@@ -88,6 +88,18 @@ module.exports.getAllGames = async function getAllGames() {
   return games;
 };
 
+module.exports.getAllGamesName = async function getAllGamesName(name) {
+  const games = await Game.find({ createur: name }).sort({ date: "desc" });
+  return games;
+};
+
+module.exports.getAllGamesNameAdver = async function getAllGamesNameAdver(
+  name
+) {
+  const games = await Game.find({ adversaire: name }).sort({ date: "desc" });
+  return games;
+};
+
 module.exports.getAllGamesOneId = async function getAllGamesOneId(id) {
   const game = await Game.findOne({ _id: id });
   return game;
