@@ -1,4 +1,5 @@
 const { connect } = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const mongoose = require("mongoose");
 mongoose
@@ -71,16 +72,36 @@ module.exports.getCoursesParNomOne =
     const users = await User.findOne({ name: nom });
     return users;
   };
+
 module.exports.getPassOne = async function getPassOne(pass) {
   const passs = await User.findOne({ password: pass });
   return passs.password;
 };
 
+// module.exports.verifCredentials = async function verifCredentials(nom, pass) {
+//   const verif = await User.findOne({
+//     $and: [{ name: nom }, { password: pass }],
+//   });
+//   return verif;
+// };
+
 module.exports.verifCredentials = async function verifCredentials(nom, pass) {
-  const verif = await User.findOne({
-    $and: [{ name: nom }, { password: pass }],
-  });
-  return verif;
+  const users = await User.find({ name: nom });
+  const salt = await bcrypt.genSalt(10);
+
+  for (let i = 0; i < users.length; i++) {
+    const element = users[i];
+    if (bcrypt.compare(pass, element.password)) {
+      console.log("mdp ok");
+      return element;
+    }
+  }
+
+  // const usersPass = users.map(async(e) => {
+  //   const hash = await bcrypt.hash(e.password, salt);
+  //   if(await bcrypt.compare(pass, salt){
+
+  //   })
 };
 
 module.exports.getAllGames = async function getAllGames() {

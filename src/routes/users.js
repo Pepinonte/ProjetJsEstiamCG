@@ -6,6 +6,7 @@ const path = require("path");
 const exphbs = require("express-handlebars");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcryptjs");
 const db = require("../db");
 
 const oneDay = 1000 * 60 * 60 * 24;
@@ -48,7 +49,13 @@ router.get("/user/connexion", (req, res) => res.render("users/connexion"));
 router.post("/inscription", async (req, res) => {
   console.log(req.body);
   const reponse = req.body;
-  db.createUser(req.body.user_name, req.body.user_mail, req.body.user_password);
+  // db.createUser(req.body.user_name, req.body.user_mail, req.body.user_password);
+  const pass = req.body.password;
+  const text = String(pass);
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(text, salt);
+  db.createUser(req.body.user_name, req.body.user_mail, hash);
+
   const newUser = db.getCoursesParNomOne(reponse.user_name);
   const userId = db.getAsId(newUser._id);
 
