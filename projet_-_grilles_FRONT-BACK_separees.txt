@@ -22,7 +22,7 @@ le créateur de la partie peut supprimer cette partie : 1 point		OK
 on ne peut pas supprimer une partie dont on est pas le créateur : 1 point	OK
 
 chaque joueur possède initialement 100 jetons : 1 point		OK
-Chaque joueur mise en secret un certain nombre de jetons (entre 0 et 100) : 2 points		!
+Chaque joueur mise en secret un certain nombre de jetons (entre 0 et 100) : 2 points		OK
 Celui qui a misé le plus se voit retirer le montant de sa mise de ses jetons, mais voit le lot avancer d'un cran dans sa direction : 3 points
 le joueur qui n'a pas remporté le pari garde sa mise et ne perd aucun jeton : 2 points
 Les joueurs continuent à parier jusqu'à que le lot arrive sur l'emplacement d'un des joueurs : 1 point
@@ -50,9 +50,9 @@ on ne peut pas supprimer une partie dont on est pas le créateur : 1 point	OK
 
 On voit 11 emplacements contigus : 2 points		OK
 On voit le nom et nombre de jetons des joueurs : 1 point	OK
-On peut miser : 3 points		!
-un pari est généré automatiquement après 30 secondes (entre 0 et le nombre de jetons du joueur) : 1 point		!
-la partie sera mise à jour sans intervention de l'utilisateur : 3 points		!
+On peut miser : 3 points		OK
+un pari est généré automatiquement après 30 secondes (entre 0 et le nombre de jetons du joueur) : 1 point		
+la partie sera mise à jour sans intervention de l'utilisateur : 3 points		
 On voit le nom du gagnant : 1 point
 
 
