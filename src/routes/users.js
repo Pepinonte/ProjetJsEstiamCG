@@ -40,8 +40,6 @@ router.get("/newGame", (req, res) => {
   console.log(req.session.useraz);
 });
 
-// router.get("/game/rejoindrePartie", (req, res) => res.render("game/modelGame", { jetons }));
-
 router.get("/connexion", (req, res) => res.render("users/connexion"));
 
 router.get("/user/connexion", (req, res) => res.render("users/connexion"));
@@ -101,75 +99,58 @@ router.post("/connexion", async (req, res) => {
   }
 });
 
-router.post("/parier", async (req, res) => {
+// router.get("/parier/:id", (req, res) => {
+//   const ssn = req.session;
+//   const usr = ssn.username;
+//   res.render("game/modelGame", { id: req.params.id, usr: usr });
+// });
+
+router.post("/parier/:id", async (req, res) => {
   const ssn = req.session;
   const someParie = req.body.montant;
-  const partie = await db.getAllGamesName(ssn.username);
-  const partieAd = await db.getAllGamesNameAdver(ssn.username);
-  const partieCreateur = partie.map((e) => e.createur);
-  const partieAdversaire = partieAd.map((e) => e.adversaire);
-
-  console.log("dddddddd", partieAdversaire, ssn.username);
-
-  if (ssn.username == partieCreateur) {
-    ssn.someParieJ1 = req.body.montant;
-  }
-  if (ssn.username == partieAdversaire) {
-    ssn.someParieJ2 = req.body.montant;
-    console.log("ok");
-  }
-
-  console.log("sommeParieJ1", ssn.someParieJ1);
-  console.log("sommeParieJ2", ssn.someParieJ2);
-
   const someParieInt = parseInt(someParie);
   ssn.soldeJeton = soldeTot - someParieInt;
   soldeTot = ssn.soldeJeton;
   const jetons = ssn.soldeJeton;
+  const partie = await db.getAllGamesOneId(req.params.id);
+  const partieCreateur = partie.createur;
+  const partieAdversaire = partie.adversaire;
   const usr = ssn.username;
+
+  if (ssn.username == partieCreateur) {
+    ssn.someParieJ1 = req.body.montant;
+    //maj misse j1 bdd
+    ssn.nomJ1 = partieCreateur;
+  }
+  if (ssn.username == partieAdversaire) {
+    ssn.someParieJ2 = req.body.montant;
+    //maj misse j2 bdd
+    ssn.nomJ2 = partieAdversaire;
+  }
+
+  console.log("sommeParieJ1", ssn.someParieJ1);
+  console.log("sommeParieJ2", ssn.someParieJ2);
+  console.log(partieAdversaire, ssn.username);
 
   if (jetons <= 0) {
     res.redirect("game/defaite");
     soldeTot = 100;
-  } else if (jetons > 0) {
-    res.render("game/modelGame", { jetons, usr });
+  } else if (jetons > 0 && ssn.username == partieCreateur) {
+    res.render("game/modelGame", {
+      jetons,
+      id: req.params.id,
+      usr: partieCreateur,
+    });
+  }
+  if (ssn.username == partieAdversaire) {
+    res.render("game/modelGame", {
+      jetons,
+      id: req.params.id,
+      usr: partieAdversaire,
+    });
+    console.log("ok");
   }
 });
-
-// router.post("/parier/:id", async (req, res) => {
-//   const ssn = req.session;
-//   const someParie = req.body.montant;
-//   const partie = await db.getAllGamesName(ssn.username);
-//   const partieAd = await db.getAllGamesNameAdver(ssn.username);
-//   const partieCreateur = partie.map((e) => e.createur);
-//   const partieAdversaire = partieAd.map((e) => e.adversaire);
-
-//   console.log("dddddddd", partieAdversaire, ssn.username);
-
-//   if (ssn.username == partieCreateur) {
-//     ssn.someParieJ1 = req.body.montant;
-//   }
-//   if (ssn.username == partieAdversaire) {
-//     ssn.someParieJ2 = req.body.montant;
-//     console.log("ok");
-//   }
-
-//   console.log("sommeParieJ1", ssn.someParieJ1);
-//   console.log("sommeParieJ2", ssn.someParieJ2);
-
-//   const someParieInt = parseInt(someParie);
-//   ssn.soldeJeton = soldeTot - someParieInt;
-//   soldeTot = ssn.soldeJeton;
-//   const jetons = ssn.soldeJeton;
-//   const usr = ssn.username;
-
-//   if (jetons <= 0) {
-//     res.redirect("game/defaite");
-//     soldeTot = 100;
-//   } else if (jetons > 0) {
-//     res.render("game/modelGame", { jetons, usr });
-//   }
-// });
 
 router.get("/logout", async (req, res) => {
   const ssn = req.session;
@@ -256,16 +237,11 @@ router.post("/newGame", (req, res) => {
   }
 });
 
-router.get("/game/rejoindrePartie", (req, res) => {
+router.get("/game/rejoindrePartie/:id", (req, res) => {
   const ssn = req.session;
   const usr = ssn.username;
-  res.render("game/modelGame", { usr });
-});
 
-// router.get("/game/rejoindrePartie/:id", (req, res) => {
-//   const ssn = req.session;
-//   const usr = ssn.username;
-//   res.render("game/modelGame", { usr, id });
-// });
+  res.render("game/modelGame", { id: req.params.id, usr: usr });
+});
 
 module.exports = router;

@@ -1,6 +1,4 @@
 <p>utilisateur: {{us}}</p>
-
-
 <div class="row">
   {{#each allGames}}
     <div class="col-md-3">
@@ -26,9 +24,9 @@
           {{#each this}}
           {{#if _id}}
           <input type=button class="btn btn-danger btn-block btn-sm" onclick=window.location.href='/game/newGame/{{_id}}'; value=Supprimer />
+          <input type=button class="btn btn-danger btn-block btn-sm" onclick=window.location.href='/game/rejoindrePartie/{{_id}}'; value=Rejoindre />
           {{/if}}
           {{/each}}
-          <input type=button class="btn btn-danger btn-block btn-sm" onclick=window.location.href='/game/rejoindrePartie'; value=Rejoindre />
         </div>
       </div>
     </div>

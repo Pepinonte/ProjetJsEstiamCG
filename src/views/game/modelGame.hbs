@@ -1,5 +1,4 @@
-//refresh toutes les 30 sec
-<meta http-equiv="refresh" content="30"/>
+{{!-- <meta http-equiv="refresh" content="30"/> --}}
 
 <div class="flex-container">
   <div>X</div>
@@ -19,7 +18,7 @@
   <div class="col-md-4 mx-auto">
     <div class="card-body">
       Joueur: {{usr}}
-      <form action="/parier" method="post">
+      <form action="/parier/{{id}}" method="post">
         <div>
           <label for="name">Montatant a parier:</label>
           <input class="form-control" type="text" id="montant" name="montant" />

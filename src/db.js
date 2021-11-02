@@ -20,6 +20,8 @@ const gameSchema = mongoose.Schema({
   createur: String,
   score: String,
   etat: String,
+  jetonsJ1: String,
+  jetonsJ2: String,
 });
 
 const User = mongoose.model("User", userSchema);
@@ -87,21 +89,21 @@ module.exports.getPassOne = async function getPassOne(pass) {
 
 module.exports.verifCredentials = async function verifCredentials(nom, pass) {
   const users = await User.find({ name: nom });
+  const text = "az";
   const salt = await bcrypt.genSalt(10);
+  const hast = await bcrypt.hash(text, salt);
+  // const hash = users[0].password;
+  const compare = await bcrypt.compare(text, salt);
+
+  console.log(compare);
 
   for (let i = 0; i < users.length; i++) {
     const element = users[i];
-    if (bcrypt.compare(pass, element.password)) {
+    if (await bcrypt.compare(text, hash)) {
       console.log("mdp ok");
       return element;
     }
   }
-
-  // const usersPass = users.map(async(e) => {
-  //   const hash = await bcrypt.hash(e.password, salt);
-  //   if(await bcrypt.compare(pass, salt){
-
-  //   })
 };
 
 module.exports.getAllGames = async function getAllGames() {
