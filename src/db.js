@@ -48,13 +48,17 @@ module.exports.createGame = async function createGame(
   game_name,
   game_adversaire,
   createur,
-  etat
+  etat,
+  jetonsJ1,
+  jetonsJ2
 ) {
   const game = new Game({
     name: game_name,
     adversaire: game_adversaire,
     createur: createur,
     etat: etat,
+    jetonsJ1: jetonsJ1,
+    jetonsJ2: jetonsJ2,
   });
   const result = await game.save();
   console.log(result);
@@ -79,13 +83,6 @@ module.exports.getPassOne = async function getPassOne(pass) {
   const passs = await User.findOne({ password: pass });
   return passs.password;
 };
-
-// module.exports.verifCredentials = async function verifCredentials(nom, pass) {
-//   const verif = await User.findOne({
-//     $and: [{ name: nom }, { password: pass }],
-//   });
-//   return verif;
-// };
 
 module.exports.verifCredentials = async function verifCredentials(nom, pass) {
   const users = await User.find({ name: nom });
@@ -134,3 +131,9 @@ module.exports.deleteAsId = async function getAllGames(id) {
 module.exports.getAsId = async function getAsId(id) {
   await Game.findOne({ _id: id });
 };
+
+module.exports.updateJ1 = async function updateJ1(createur, jetons) {
+  await Game.update({ createur: createur }, { $set: { jetonsJ1: jetons } });
+};
+
+// db.getCollection('games').update({createur: "az"}, {$set:{jetonsJ1: 33}})

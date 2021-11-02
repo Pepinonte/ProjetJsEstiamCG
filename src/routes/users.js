@@ -10,7 +10,6 @@ const bcrypt = require("bcryptjs");
 const db = require("../db");
 
 const oneDay = 1000 * 60 * 60 * 24;
-let soldeTot = 100;
 
 router.use(express.json());
 router.use(express.urlencoded());
@@ -102,30 +101,31 @@ router.post("/connexion", async (req, res) => {
 
 router.post("/parier/:id", async (req, res) => {
   const ssn = req.session;
+  let jetons = 100;
   const someParie = req.body.montant;
-  const someParieInt = parseInt(someParie);
-  ssn.soldeJeton = soldeTot - someParieInt;
-  soldeTot = ssn.soldeJeton;
-  const jetons = ssn.soldeJeton;
   const partie = await db.getAllGamesOneId(req.params.id);
   const partieCreateur = partie.createur;
   const partieAdversaire = partie.adversaire;
   const usr = ssn.username;
 
   if (ssn.username == partieCreateur) {
-    ssn.someParieJ1 = req.body.montant;
+    ssn.someParieJ1 = ssn.someParieJ1 - req.body.montant;
+    jetons = ssn.someParieJ1;
     //maj misse j1 bdd
+    db.updateJ1(ssn.username, jetons);
     ssn.nomJ1 = partieCreateur;
   }
   if (ssn.username == partieAdversaire) {
     ssn.someParieJ2 = req.body.montant;
+    jetons = ssn.someParieJ2;
     //maj misse j2 bdd
     ssn.nomJ2 = partieAdversaire;
   }
 
   console.log("sommeParieJ1", ssn.someParieJ1);
   console.log("sommeParieJ2", ssn.someParieJ2);
-  console.log(partieAdversaire, ssn.username);
+  console.log("partieCreateur", partieCreateur);
+  console.log("partieAdversaire", partieAdversaire);
 
   if (jetons <= 0) {
     res.redirect("game/defaite");
@@ -227,16 +227,35 @@ router.post("/newGame", (req, res) => {
       game_adversaire,
     });
   } else {
-    db.createGame(game_name, game_adversaire, usr, "en cour");
+    db.createGame(game_name, game_adversaire, usr, "en cour", 100, 100);
     res.redirect("/games");
   }
 });
 
-router.get("/game/rejoindrePartie/:id", (req, res) => {
+router.get("/game/rejoindrePartie/:id", async (req, res) => {
   const ssn = req.session;
   const usr = ssn.username;
+  const game = await db.getAllGamesOneId(req.params.id);
+  const jetonsJ1 = game.jetonsJ1;
+  const jetonsJ2 = game.jetonsJ2;
+  ssn.someParieJ1 = jetonsJ1;
+  ssn.someParieJ2 = jetonsJ2;
+  const createur = game.createur;
+  const adversaire = game.adversaire;
 
-  res.render("game/modelGame", { id: req.params.id, usr: usr });
+  if (ssn.username == createur) {
+    res.render("game/modelGame", {
+      jetons: jetonsJ1,
+      id: req.params.id,
+      usr: usr,
+    });
+  } else if (ssn.username == adversaire) {
+    res.render("game/modelGame", {
+      jetons: jetonsJ2,
+      id: req.params.id,
+      usr: usr,
+    });
+  }
 });
 
 module.exports = router;
