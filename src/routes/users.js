@@ -49,9 +49,9 @@ router.post("/inscription", async (req, res) => {
   const reponse = req.body;
   // db.createUser(req.body.user_name, req.body.user_mail, req.body.user_password);
   const pass = req.body.password;
-  const text = String(pass);
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(text, salt);
+  const text = req.body.user_password;
+  console.log("ddddd", req.body.password);
+  const hash = await bcrypt.hash(text, await bcrypt.genSalt(10));
   db.createUser(req.body.user_name, req.body.user_mail, hash);
 
   const newUser = db.getCoursesParNomOne(reponse.user_name);
@@ -63,47 +63,42 @@ router.post("/inscription", async (req, res) => {
 router.post("/connexion", async (req, res) => {
   try {
     const user = await db.verifCredentials(req.body.name, req.body.password);
-    console.log(user.name + " vien de ce conenter");
-    const ssn = req.session;
-    ssn.activsUsers = [];
-    const activsUsers = ssn.activsUsers;
-    activsUsers.push(await db.getCoursesParNomOne(req.body.name));
-    console.log(activsUsers);
+    if (user != {}) {
+      console.log(user.name + " vien de ce conenter");
+      const ssn = req.session;
+      ssn.activsUsers = [];
+      const activsUsers = ssn.activsUsers;
+      activsUsers.push(await db.getCoursesParNomOne(req.body.name));
+      console.log(activsUsers);
 
-    ssn.username = req.body.name;
-    ssn.password = req.body.password;
-    const useri = ssn.username;
-    ssn.useri = ssn.username;
+      ssn.username = req.body.name;
+      ssn.password = req.body.password;
+      const useri = ssn.username;
+      ssn.useri = ssn.username;
 
-    const allGames = await db.getAllGames();
-    // const allGames = await db.getAllGamesName(ssn.username);
+      const allGames = await db.getAllGames();
 
-    const allIdGames = allGames.map((e) => e.id);
-    const allGamesNames = allGames.map((e) => {
-      const ret = "Nom Partie:" + e.name + " " + "Adversaire:" + e.adversaire;
-      return ret;
-    });
+      const allIdGames = allGames.map((e) => e.id);
+      const allGamesNames = allGames.map((e) => {
+        const ret = "Nom Partie:" + e.name + " " + "Adversaire:" + e.adversaire;
+        return ret;
+      });
 
-    const { _id } = allIdGames;
-    console.log(allGames);
+      const { _id } = allIdGames;
+      console.log(allGames);
 
-    res.render("users/compteUtilisateur", {
-      us: useri,
-      allGames,
-      allGamesNames,
-      allIdGames,
-    });
+      res.render("users/compteUtilisateur", {
+        us: useri,
+        allGames,
+        allGamesNames,
+        allIdGames,
+      });
+    }
   } catch (error) {
     console.log("identifiant ou mdp faux");
     res.render("users/connexion");
   }
 });
-
-// router.get("/parier/:id", (req, res) => {
-//   const ssn = req.session;
-//   const usr = ssn.username;
-//   res.render("game/modelGame", { id: req.params.id, usr: usr });
-// });
 
 router.post("/parier/:id", async (req, res) => {
   const ssn = req.session;

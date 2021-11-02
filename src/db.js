@@ -91,15 +91,14 @@ module.exports.verifCredentials = async function verifCredentials(nom, pass) {
   const users = await User.find({ name: nom });
   const text = "az";
   const salt = await bcrypt.genSalt(10);
-  const hast = await bcrypt.hash(text, salt);
-  // const hash = users[0].password;
-  const compare = await bcrypt.compare(text, salt);
+  const hash = users[0].password;
+  const compare = await bcrypt.compare(text, hash);
 
   console.log(compare);
 
   for (let i = 0; i < users.length; i++) {
     const element = users[i];
-    if (await bcrypt.compare(text, hash)) {
+    if (await bcrypt.compare(pass, hash)) {
       console.log("mdp ok");
       return element;
     }
